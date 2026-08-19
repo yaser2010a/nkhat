@@ -9,6 +9,43 @@ function showToast(message, isError) {
     toast._timer = setTimeout(() => toast.classList.remove('show'), 3000);
 }
 
+// الربط البرمجي للأحداث بدل الـ onclick (حل مشكلة الـ CSP)
+function initEventListeners() {
+    document.addEventListener('click', (e) => {
+        const target = e.target;
+        const action = target.dataset.action;
+        const id = target.dataset.id ? Number(target.dataset.id) : null;
+
+        if (!action) return;
+
+        switch(action) {
+            case 'edit': editProduct(id); break;
+            case 'archive': archiveProductRow(id); break;
+            case 'restore': restoreProduct(id); break;
+            case 'delete': deleteProductRow(id); break;
+            case 'approve': approveReview(id); break;
+            case 'deleteReview': deleteReviewRow(id); break;
+            case 'deleteCategory': deleteCategory(id); break;
+        }
+    });
+
+    document.getElementById('btnOpenProductModal')?.addEventListener('click', openProductModal);
+    document.getElementById('btnSaveSettings')?.addEventListener('click', saveSettings);
+    document.getElementById('saveProductBtn')?.addEventListener('click', saveProduct);
+    document.getElementById('closeModalBtn')?.addEventListener('click', closeProductModal);
+    document.getElementById('btnAddCategory')?.addEventListener('click', addCategory);
+    
+    document.querySelectorAll('.sidebar-link[data-section]').forEach(link => {
+        link.addEventListener('click', function (e) {
+            e.preventDefault();
+            document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+            document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
+            this.classList.add('active');
+            document.getElementById('section-' + this.dataset.section).classList.add('active');
+        });
+    });
+}
+
 (async () => {
     try {
         await api.get('/admin/me');
@@ -27,16 +64,7 @@ document.getElementById('logoutBtn').addEventListener('click', async (e) => {
 });
 
 function initAdmin() {
-    document.querySelectorAll('.sidebar-link[data-section]').forEach(link => {
-        link.addEventListener('click', function (e) {
-            e.preventDefault();
-            document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
-            document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
-            this.classList.add('active');
-            document.getElementById('section-' + this.dataset.section).classList.add('active');
-        });
-    });
-
+    initEventListeners();
     loadCategories();
     loadProducts();
     loadReviews();
@@ -65,11 +93,11 @@ function renderProducts(products) {
             <td>${p.price} ريال</td>
             <td>${p.archived ? '<span class="badge-muted">مؤرشف</span>' : '<span class="badge-success">متوفر</span>'}</td>
             <td class="actions-cell">
-                <i class="ti ti-edit" onclick="editProduct(${p.id})" title="تعديل"></i>
+                <i class="ti ti-edit" data-action="edit" data-id="${p.id}" title="تعديل"></i>
                 ${p.archived
-                    ? `<i class="ti ti-refresh" onclick="restoreProduct(${p.id})" title="استرجاع"></i>`
-                    : `<i class="ti ti-archive" onclick="archiveProductRow(${p.id})" title="أرشفة"></i>`}
-                <i class="ti ti-trash" onclick="deleteProductRow(${p.id})" title="حذف نهائي"></i>
+                    ? `<i class="ti ti-refresh" data-action="restore" data-id="${p.id}" title="استرجاع"></i>`
+                    : `<i class="ti ti-archive" data-action="archive" data-id="${p.id}" title="أرشفة"></i>`}
+                <i class="ti ti-trash" data-action="delete" data-id="${p.id}" title="حذف نهائي"></i>
             </td>
         `;
         body.appendChild(row);
@@ -205,8 +233,8 @@ function renderReviews(pending, approved) {
                 <p class="review-text">${escapeHtml(r.review_text)}</p>
             </div>
             <div class="review-actions">
-                <i class="ti ti-check accept" onclick="approveReview(${r.id})" title="قبول"></i>
-                <i class="ti ti-x reject" onclick="deleteReviewRow(${r.id})" title="رفض"></i>
+                <i class="ti ti-check accept" data-action="approve" data-id="${r.id}" title="قبول"></i>
+                <i class="ti ti-x reject" data-action="deleteReview" data-id="${r.id}" title="رفض"></i>
             </div>
         `;
         pendingList.appendChild(row);
@@ -222,7 +250,7 @@ function renderReviews(pending, approved) {
                 <p class="review-name">${escapeHtml(r.author_name)}</p>
                 <p class="review-text">${escapeHtml(r.review_text)}</p>
             </div>
-            <i class="ti ti-trash reject" onclick="deleteReviewRow(${r.id})" title="حذف"></i>
+            <i class="ti ti-trash reject" data-action="deleteReview" data-id="${r.id}" title="حذف"></i>
         `;
         publishedList.appendChild(row);
     });
@@ -271,7 +299,7 @@ function renderCategories() {
         row.className = 'category-row';
         row.innerHTML = `
             <span>${escapeHtml(c.name)}</span>
-            <i class="ti ti-trash" onclick="deleteCategory(${c.id})"></i>
+            <i class="ti ti-trash" data-action="deleteCategory" data-id="${c.id}"></i>
         `;
         list.appendChild(row);
     });

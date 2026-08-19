@@ -1,128 +1,79 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>لوحة تحكم - تموينات النكهة الشامية</title>
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة تحكم - تموينات النكهة الشامية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <div class="admin-wrapper" id="adminWrapper" style="display:none;">
-
     <aside class="sidebar">
         <div class="sidebar-logo">
             <div class="sidebar-logo-icon"><i class="ti ti-shopping-cart"></i></div>
             <span>النكهة الشامية</span>
         </div>
-
         <nav class="sidebar-nav">
-            <a href="#dashboard" class="sidebar-link active" data-section="dashboard">
-                <i class="ti ti-layout-dashboard"></i>
-                <span>الرئيسية</span>
+            <a href="#" class="sidebar-link active" data-section="dashboard">
+                <i class="ti ti-layout-dashboard"></i> <span>الرئيسية</span>
             </a>
-            <a href="#products" class="sidebar-link" data-section="products">
-                <i class="ti ti-basket"></i>
-                <span>المنتجات</span>
+            <a href="#" class="sidebar-link" data-section="products">
+                <i class="ti ti-basket"></i> <span>المنتجات</span>
             </a>
-            <a href="#reviews" class="sidebar-link" data-section="reviews">
-                <i class="ti ti-message-star"></i>
-                <span>الآراء</span>
+            <a href="#" class="sidebar-link" data-section="reviews">
+                <i class="ti ti-message-star"></i> <span>الآراء</span>
             </a>
-            <a href="#categories" class="sidebar-link" data-section="categories">
-                <i class="ti ti-category"></i>
-                <span>التصنيفات</span>
+            <a href="#" class="sidebar-link" data-section="categories">
+                <i class="ti ti-category"></i> <span>التصنيفات</span>
             </a>
-            <a href="#settings" class="sidebar-link" data-section="settings">
-                <i class="ti ti-settings"></i>
-                <span>إعدادات المتجر</span>
+            <a href="#" class="sidebar-link" data-section="settings">
+                <i class="ti ti-settings"></i> <span>إعدادات المتجر</span>
             </a>
         </nav>
-
         <div class="sidebar-footer" style="margin-top:auto; padding-top:20px;">
             <a href="#" id="logoutBtn" class="sidebar-link">
-                <i class="ti ti-logout"></i>
-                <span>تسجيل الخروج</span>
+                <i class="ti ti-logout"></i> <span>تسجيل الخروج</span>
             </a>
         </div>
     </aside>
 
     <main class="admin-main">
-
         <div class="toast" id="toast"></div>
 
         <section id="section-dashboard" class="admin-section active">
             <div class="section-header">
-                <div>
-                    <h1>لوحة التحكم</h1>
-                    <p>نظرة عامة على المتجر</p>
-                </div>
+                <h1>لوحة التحكم</h1>
             </div>
-
             <div class="stats-grid">
-                <div class="stat-card">
-                    <p class="stat-label">إجمالي المنتجات</p>
-                    <p class="stat-value" id="statProducts">-</p>
-                </div>
-                <div class="stat-card">
-                    <p class="stat-label">الآراء المنشورة</p>
-                    <p class="stat-value" id="statReviews">-</p>
-                </div>
-                <div class="stat-card">
-                    <p class="stat-label">آراء بانتظار المراجعة</p>
-                    <p class="stat-value" id="statPending">-</p>
-                </div>
-                <div class="stat-card">
-                    <p class="stat-label">التصنيفات</p>
-                    <p class="stat-value" id="statCategories">-</p>
-                </div>
+                <div class="stat-card"><p class="stat-label">إجمالي المنتجات</p><p class="stat-value" id="statProducts">-</p></div>
+                <div class="stat-card"><p class="stat-label">الآراء المنشورة</p><p class="stat-value" id="statReviews">-</p></div>
+                <div class="stat-card"><p class="stat-label">آراء بانتظار المراجعة</p><p class="stat-value" id="statPending">-</p></div>
+                <div class="stat-card"><p class="stat-label">التصنيفات</p><p class="stat-value" id="statCategories">-</p></div>
             </div>
         </section>
 
         <section id="section-products" class="admin-section">
             <div class="section-header">
-                <div>
-                    <h1>المنتجات</h1>
-                    <p>إدارة منتجات المتجر</p>
-                </div>
-                <button class="btn-primary" onclick="openProductModal()">
-                    <i class="ti ti-plus"></i>
-                    منتج جديد
-                </button>
+                <h1>المنتجات</h1>
+                <button class="btn-primary" id="btnOpenProductModal"><i class="ti ti-plus"></i> منتج جديد</button>
             </div>
-
             <div class="table-card">
-                <table class="admin-table" id="productsTable">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th>المنتج</th>
-                            <th>التصنيف</th>
-                            <th>السعر</th>
-                            <th>الحالة</th>
-                            <th></th>
-                        </tr>
-                    </thead>
+                <table class="admin-table">
+                    <thead><tr><th></th><th>المنتج</th><th>التصنيف</th><th>السعر</th><th>الحالة</th><th></th></tr></thead>
                     <tbody id="productsTableBody"></tbody>
                 </table>
             </div>
         </section>
 
         <section id="section-reviews" class="admin-section">
-            <div class="section-header">
-                <div>
-                    <h1>الآراء</h1>
-                    <p>مراجعة آراء العملاء قبل نشرها</p>
-                </div>
-            </div>
-
+            <div class="section-header"><h1>الآراء</h1></div>
             <div class="table-card">
                 <p class="table-card-title">بانتظار المراجعة</p>
                 <div id="pendingReviewsList"></div>
             </div>
-
             <div class="table-card">
                 <p class="table-card-title">منشورة على الموقع</p>
                 <div id="publishedReviewsList"></div>
@@ -131,122 +82,57 @@
 
         <section id="section-categories" class="admin-section">
             <div class="section-header">
-                <div>
-                    <h1>التصنيفات</h1>
-                    <p>تصنيفات المنتجات الظاهرة في الموقع</p>
-                </div>
-                <button class="btn-primary" onclick="addCategory()">
-                    <i class="ti ti-plus"></i>
-                    تصنيف جديد
-                </button>
+                <h1>التصنيفات</h1>
+                <button class="btn-primary" id="btnAddCategory"><i class="ti ti-plus"></i> تصنيف جديد</button>
             </div>
-
-            <div class="table-card">
-                <div id="categoriesList" class="categories-list-admin"></div>
-            </div>
+            <div class="table-card"><div id="categoriesList" class="categories-list-admin"></div></div>
         </section>
 
         <section id="section-settings" class="admin-section">
-            <div class="section-header">
-                <div>
-                    <h1>إعدادات المتجر</h1>
-                    <p>كل بيانات المتجر الظاهرة بصفحة اللاندينق</p>
-                </div>
-            </div>
-
+            <div class="section-header"><h1>إعدادات المتجر</h1></div>
             <div class="table-card">
                 <div class="settings-form">
-                    <label>اسم المتجر</label>
-                    <input type="text" id="setStoreName">
-
-                    <label>العنوان الفرعي (تحت الاسم)</label>
-                    <input type="text" id="setStoreTagline">
-
-                    <label>رقم الاتصال</label>
-                    <input type="text" id="setPhone">
-
-                    <label>رقم الواتساب (بدون + أو أصفار، مثال: 9665xxxxxxxx)</label>
-                    <input type="text" id="setWhatsapp">
-
-                    <label>رسالة واتساب الافتراضية</label>
-                    <input type="text" id="setWhatsappMessage">
-
-                    <label>العنوان النصي (يظهر بالفوتر)</label>
-                    <input type="text" id="setAddress">
-
-                    <label>رابط خرائط قوقل</label>
-                    <input type="text" id="setMapsUrl">
-
-                    <label>رابط انستقرام</label>
-                    <input type="text" id="setInstagram">
-
-                    <label>رابط سناب شات</label>
-                    <input type="text" id="setSnapchat">
-
-                    <label>السجل التجاري</label>
-                    <input type="text" id="setCr">
-
-                    <label>رخصة المتجر</label>
-                    <input type="text" id="setLicense">
-
-                    <label>عنوان قسم "من نحن"</label>
-                    <input type="text" id="setAboutTitle">
-
-                    <label>نص قسم "من نحن"</label>
-                    <textarea id="setAboutDesc" rows="4"></textarea>
-
-                    <label>صورة البانر (قسم "من نحن")</label>
-                    <input type="file" id="setBannerImage" accept="image/*">
+                    <label>اسم المتجر</label><input type="text" id="setStoreName">
+                    <label>العنوان الفرعي</label><input type="text" id="setStoreTagline">
+                    <label>رقم الاتصال</label><input type="text" id="setPhone">
+                    <label>رقم الواتساب</label><input type="text" id="setWhatsapp">
+                    <label>رسالة واتساب الافتراضية</label><input type="text" id="setWhatsappMessage">
+                    <label>العنوان النصي</label><input type="text" id="setAddress">
+                    <label>رابط خرائط قوقل</label><input type="text" id="setMapsUrl">
+                    <label>رابط انستقرام</label><input type="text" id="setInstagram">
+                    <label>رابط سناب شات</label><input type="text" id="setSnapchat">
+                    <label>السجل التجاري</label><input type="text" id="setCr">
+                    <label>رخصة المتجر</label><input type="text" id="setLicense">
+                    <label>عنوان قسم "من نحن"</label><input type="text" id="setAboutTitle">
+                    <label>نص قسم "من نحن"</label><textarea id="setAboutDesc" rows="4"></textarea>
+                    <label>صورة البانر</label><input type="file" id="setBannerImage" accept="image/*">
                     <img id="setBannerPreview" style="max-width:200px;border-radius:8px;margin-top:8px;display:none;">
-
-                    <button class="btn-primary" style="margin-top: 8px; align-self: flex-start;" onclick="saveSettings()">حفظ التغييرات</button>
+                    <button class="btn-primary" id="btnSaveSettings" style="margin-top: 8px;">حفظ التغييرات</button>
                 </div>
             </div>
         </section>
-
     </main>
 </div>
 
-<div id="loadingScreen" style="min-height:100vh;display:flex;align-items:center;justify-content:center;color:var(--text-muted);">
-    جاري التحقق من الجلسة...
-</div>
+<div id="loadingScreen" style="min-height:100vh;display:flex;align-items:center;justify-content:center;color:var(--text-muted);">جاري التحقق...</div>
 
 <div class="modal-overlay" id="productModal">
     <div class="modal-box">
-        <div class="modal-header">
-            <p id="modalTitle">إضافة منتج جديد</p>
-            <i class="ti ti-x" onclick="closeProductModal()"></i>
-        </div>
-
+        <div class="modal-header"><p id="modalTitle">إضافة منتج جديد</p><i class="ti ti-x" id="closeModalBtn"></i></div>
         <div class="modal-body">
             <input type="hidden" id="productId">
-            <label>اسم المنتج</label>
-            <input type="text" id="productName" placeholder="مثال: بن عربي محمص">
-
-            <label>التصنيف</label>
-            <select id="productCategory">
-                <option value="">بدون تصنيف</option>
-            </select>
-
-            <label>السعر (ريال)</label>
-            <input type="number" id="productPrice" placeholder="0">
-
-            <label>وصف المنتج (اختياري)</label>
-            <textarea id="productDesc" rows="3" placeholder="وصف قصير يظهر للعميل عند الاستفسار"></textarea>
-
-            <label id="productImageLabel">صورة المنتج</label>
-            <input type="file" id="productImage" accept="image/*">
-
-            <button class="btn-primary" style="margin-top: 4px;" id="saveProductBtn" onclick="saveProduct()">حفظ المنتج</button>
+            <label>اسم المنتج</label><input type="text" id="productName">
+            <label>التصنيف</label><select id="productCategory"><option value="">بدون تصنيف</option></select>
+            <label>السعر</label><input type="number" id="productPrice">
+            <label>وصف المنتج</label><textarea id="productDesc" rows="3"></textarea>
+            <label id="productImageLabel">صورة المنتج</label><input type="file" id="productImage" accept="image/*">
+            <button class="btn-primary" id="saveProductBtn">حفظ المنتج</button>
         </div>
     </div>
 </div>
 
-
-<!-- روابط السكربتات الخارجية -->
 <script src="../../assets/config.js"></script>
 <script src="../../assets/api-client.js"></script>
 <script src="admin-logic.js"></script>
-
 </body>
 </html>
