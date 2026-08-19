@@ -261,13 +261,27 @@ function renderReviews(pending, approved) {
 
 async function approveReview(id) {
     try {
-        await api.put(`/admin/reviews/approve/${id}`, {});
+        const token = localStorage.getItem('admin_token') || '';
+        const response = await fetch(`${window.NKHAT_API_BASE}/admin/reviews/approve/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({})
+        });
+
+        if (!response.ok) {
+            throw new Error('فشل اعتماد الرأي');
+        }
+
         showToast('تم قبول الرأي');
         loadReviews();
-    } catch (err) {
+    } catch (err) { // أضفنا كلمة catch هنا بشكل صحيح
         showToast(err.message, true);
     }
 }
+
 
 async function deleteReviewRow(id) {
     if (!confirm('حذف هذا الرأي؟')) return;
