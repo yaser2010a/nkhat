@@ -366,6 +366,49 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+
+document.addEventListener('DOMContentLoaded', () => {
+    const starIcons = document.querySelectorAll('#ratingSelect i');
+    const ratingInput = document.getElementById('reviewRating');
+
+    if (starIcons.length > 0 && ratingInput) {
+        starIcons.forEach(star => {
+            // عند المرور بالماوس لتلوين النجوم مؤقتاً
+            star.addEventListener('mouseenter', function() {
+                const hoverRating = this.getAttribute('data-rating');
+                highlightStars(hoverRating);
+            });
+
+            // إرجاع النجوم للتقييم الحقيقي عند إبعاد الماوس
+            star.addEventListener('mouseleave', function() {
+                highlightStars(ratingInput.value);
+            });
+
+            // عند النقر لتثبيت التقييم
+            star.addEventListener('click', function() {
+                const selectedRating = this.getAttribute('data-rating');
+                ratingInput.value = selectedRating;
+                highlightStars(selectedRating);
+            });
+        });
+    }
+
+    function highlightStars(count) {
+        starIcons.forEach(star => {
+            const starRating = star.getAttribute('data-rating');
+            if (starRating <= count) {
+                star.classList.remove('ti-star');
+                star.classList.add('ti-star-filled'); // تلوين النجمة إذا كانت داخل التحديد
+                star.style.color = '#ffc107';
+            } else {
+                star.classList.remove('ti-star-filled');
+                star.classList.add('ti-star');
+                star.style.color = '#ccc'; // إرجاعها للون غير المحدّد
+            }
+        });
+    }
+});
+
 // تحميل البيانات الأولية للمتجر
 loadStoreSettings();
 loadCategories();
