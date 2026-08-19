@@ -75,13 +75,28 @@
                     <!-- 3. قسم آراء العملاء -->
                     <section id="reviews" class="reviews-section">
                         <div class="reviews-header">
-                            <button class="add-review-btn">
+                            <button class="add-review-btn" id="openReviewFormBtn">
                                 <i class="ti ti-plus" aria-hidden="true"></i>
                                 أضف رأيك
                             </button>
                         </div>
 
-                        <div class="review-form" id="reviewForm">
+                        <!-- نموذج إضافة الرأي مع زر الإغلاق (X) وتقييم النجوم -->
+                        <div class="review-form" id="reviewForm" style="display: none; position: relative;">
+                            <button type="button" id="closeReviewFormBtn" class="close-form-btn" style="position: absolute; top: 10px; left: 10px; background: none; border: none; font-size: 20px; cursor: pointer;">&times;</button>
+                            
+                            <h3>أضف رأيك وتقييمك</h3>
+                            
+                            <!-- اختيار النجوم تفاعلياً -->
+                            <div class="rating-select" id="ratingSelect" style="display: flex; gap: 5px; margin-bottom: 10px; cursor: pointer; color: #ffc107; font-size: 24px;">
+                                <i class="ti ti-star" data-rating="1"></i>
+                                <i class="ti ti-star" data-rating="2"></i>
+                                <i class="ti ti-star" data-rating="3"></i>
+                                <i class="ti ti-star" data-rating="4"></i>
+                                <i class="ti ti-star" data-rating="5"></i>
+                            </div>
+                            <input type="hidden" id="reviewRating" value="5">
+
                             <input type="text" id="reviewerName" placeholder="اسمك" maxlength="30">
                             <textarea id="reviewText" placeholder="اكتب رأيك هنا..." maxlength="150" rows="3"></textarea>
                             <button class="submit-review-btn" id="submitReviewBtn">إرسال الرأي</button>
