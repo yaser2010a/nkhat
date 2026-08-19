@@ -249,8 +249,11 @@ function toggleReviewForm() {
 async function submitReview() {
     let nameInput = document.getElementById('reviewerName');
     let textInput = document.getElementById('reviewText');
+    let ratingInput = document.getElementById('reviewRating');
+    
     let name = nameInput ? nameInput.value.trim() : '';
     let text = textInput ? textInput.value.trim() : '';
+    let rating = ratingInput ? Number(ratingInput.value) : 5;
 
     if (!name || !text) {
         alert('الرجاء تعبئة الاسم والرأي');
@@ -260,10 +263,15 @@ async function submitReview() {
     const btn = document.getElementById('submitReviewBtn');
     if (btn) btn.disabled = true;
     try {
-        await api.post('/reviews', { author_name: name, review_text: text });
+        await api.post('/reviews', { 
+            author_name: name, 
+            review_text: text,
+            rating: rating // إرسال التقييم مع الطلب
+        });
         alert('تم إرسال رأيك بنجاح — سيظهر بعد مراجعته من إدارة المتجر');
         if (nameInput) nameInput.value = '';
         if (textInput) textInput.value = '';
+        if (ratingInput) ratingInput.value = '5';
         let form = document.getElementById('reviewForm');
         if (form) form.style.display = 'none';
     } catch (err) {
