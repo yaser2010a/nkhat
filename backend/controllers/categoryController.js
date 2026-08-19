@@ -72,11 +72,17 @@ async function updateCategory(req, res) {
 
 async function deleteCategory(req, res) {
   const id = parseInt(req.params.id, 10);
-  const result = await execute('DELETE FROM categories WHERE id = $1', [id]);
-  if (result.rowCount === 0) {
+  
+  // 1. تحقق من وجود التصنيف أولاً
+  const [existing] = await query('SELECT id FROM categories WHERE id = $1', [id]);
+  if (!existing) {
     return res.status(404).json({ success: false, message: 'التصنيف غير موجود' });
   }
-  // المنتجات المرتبطة تبقى بدون تصنيف (category_id يتحول تلقائياً إلى NULL بسبب ON DELETE SET NULL)
+
+  // 2. تنفيذ الحذف بأمان
+  await execute('DELETE FROM categories WHERE id = $1', [id]);
+  
+  // 3. إرجاع النجاح
   res.json({ success: true, message: 'تم حذف التصنيف' });
 }
 

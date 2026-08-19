@@ -22,7 +22,7 @@
     "jsonwebtoken": "^9.0.2",
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^9.0.5",
-    "pg": "^8.13.1",
+    "pg": "^8.23.0",
     "resend": "^6.20.0",
     "sanitize-html": "^2.14.0",
     "uuid": "^11.0.5"
