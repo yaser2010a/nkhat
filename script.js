@@ -50,6 +50,13 @@ async function loadStoreSettings() {
         if (s.banner_image_url) {
             document.getElementById('bannerImage').src = apiOrigin() + s.banner_image_url;
         }
+
+        // تعبئة بيانات المودال الخاصة بالشروط والأحكام
+        const modalCr = document.getElementById('modalCrNumber');
+        const modalLicense = document.getElementById('modalLicenseNumber');
+        if (modalCr) modalCr.textContent = s.cr_number || '0000000000';
+        if (modalLicense) modalLicense.textContent = s.license_number || '0000000000';
+
     } catch (err) {
         console.error('تعذر تحميل إعدادات المتجر', err);
     }
@@ -67,6 +74,7 @@ async function loadCategories() {
 
 function renderCategories() {
     const list = document.getElementById('categoriesList');
+    if (!list) return;
     const visible = allCategories.slice(0, categoriesShown);
 
     const existingBtns = list.querySelectorAll('.category-btn:not(.category-btn-all)');
@@ -76,12 +84,14 @@ function renderCategories() {
         const btn = document.createElement('button');
         btn.className = 'category-btn';
         btn.textContent = c.name;
-        btn.onclick = () => filterCategory(c.name, btn);
+        btn.addEventListener('click', () => filterCategory(c.name, btn));
         list.appendChild(btn);
     });
 
     const loadMoreBtn = document.getElementById('loadMoreCategories');
-    loadMoreBtn.style.display = categoriesShown < allCategories.length ? 'block' : 'none';
+    if (loadMoreBtn) {
+        loadMoreBtn.style.display = categoriesShown < allCategories.length ? 'block' : 'none';
+    }
 }
 
 function loadMoreCategories() {
@@ -91,6 +101,7 @@ function loadMoreCategories() {
 
 async function loadProducts() {
     const grid = document.getElementById('productsGrid');
+    if (!grid) return;
     grid.innerHTML = '<p class="muted" id="productsLoading">جاري تحميل المنتجات...</p>';
     try {
         const res = await api.get('/products?limit=200');
@@ -105,6 +116,7 @@ async function loadProducts() {
 
 function renderProducts() {
     const grid = document.getElementById('productsGrid');
+    if (!grid) return;
     let items = Array.isArray(allProducts) ? [...allProducts] : [];
 
     if (currentCategory !== 'الكل') {
@@ -116,9 +128,11 @@ function renderProducts() {
 
     grid.innerHTML = '';
 
+    const loadMoreProdBtn = document.getElementById('loadMoreProducts');
+
     if (items.length === 0) {
         grid.innerHTML = '<p class="muted" style="text-align: center; width: 100%; padding: 20px;">لا توجد منتجات حالياً</p>';
-        document.getElementById('loadMoreProducts').style.display = 'none';
+        if (loadMoreProdBtn) loadMoreProdBtn.style.display = 'none';
         return;
     }
 
@@ -139,7 +153,9 @@ function renderProducts() {
         grid.appendChild(el);
     });
 
-    document.getElementById('loadMoreProducts').style.display = productsShown < items.length ? 'block' : 'none';
+    if (loadMoreProdBtn) {
+        loadMoreProdBtn.style.display = productsShown < items.length ? 'block' : 'none';
+    }
 }
 
 function loadMoreProducts() {
@@ -148,14 +164,17 @@ function loadMoreProducts() {
 }
 
 function filterProducts() {
-    currentSearch = document.getElementById('searchInput').value.toLowerCase();
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+        currentSearch = searchInput.value.toLowerCase();
+    }
     productsShown = PRODUCTS_STEP;
     renderProducts();
 }
 
 function filterCategory(category, btn) {
     document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
+    if (btn) btn.classList.add('active');
     currentCategory = category;
     productsShown = PRODUCTS_STEP;
     renderProducts();
@@ -163,6 +182,7 @@ function filterCategory(category, btn) {
 
 async function loadReviews() {
     const scroll = document.getElementById('reviewsScroll');
+    if (!scroll) return;
     scroll.innerHTML = '<p class="muted" id="reviewsLoading">جاري تحميل الآراء...</p>';
     try {
         const res = await api.get('/reviews?limit=200');
@@ -177,13 +197,15 @@ async function loadReviews() {
 
 function renderReviews() {
     const scroll = document.getElementById('reviewsScroll');
+    if (!scroll) return;
     scroll.innerHTML = '';
 
     const validReviews = Array.isArray(allReviews) ? allReviews.filter(Boolean) : [];
+    const loadMoreRevBtn = document.getElementById('loadMoreReviews');
 
     if (validReviews.length === 0) {
         scroll.innerHTML = '<p class="muted" style="text-align: center; width: 100%; padding: 20px;">لا توجد آراء حالياً</p>';
-        document.getElementById('loadMoreReviews').style.display = 'none';
+        if (loadMoreRevBtn) loadMoreRevBtn.style.display = 'none';
         return;
     }
 
@@ -192,7 +214,9 @@ function renderReviews() {
         scroll.appendChild(buildReviewCard(r.author_name || 'زائر', r.review_text || ''));
     });
 
-    document.getElementById('loadMoreReviews').style.display = reviewsShown < validReviews.length ? 'block' : 'none';
+    if (loadMoreRevBtn) {
+        loadMoreRevBtn.style.display = reviewsShown < validReviews.length ? 'block' : 'none';
+    }
 }
 
 function loadMoreReviews() {
@@ -217,12 +241,16 @@ function buildReviewCard(name, text) {
 
 function toggleReviewForm() {
     let form = document.getElementById('reviewForm');
-    form.style.display = form.style.display === 'none' ? 'flex' : 'none';
+    if (form) {
+        form.style.display = form.style.display === 'none' ? 'flex' : 'none';
+    }
 }
 
 async function submitReview() {
-    let name = document.getElementById('reviewerName').value.trim();
-    let text = document.getElementById('reviewText').value.trim();
+    let nameInput = document.getElementById('reviewerName');
+    let textInput = document.getElementById('reviewText');
+    let name = nameInput ? nameInput.value.trim() : '';
+    let text = textInput ? textInput.value.trim() : '';
 
     if (!name || !text) {
         alert('الرجاء تعبئة الاسم والرأي');
@@ -230,17 +258,18 @@ async function submitReview() {
     }
 
     const btn = document.getElementById('submitReviewBtn');
-    btn.disabled = true;
+    if (btn) btn.disabled = true;
     try {
         await api.post('/reviews', { author_name: name, review_text: text });
         alert('تم إرسال رأيك بنجاح — سيظهر بعد مراجعته من إدارة المتجر');
-        document.getElementById('reviewerName').value = '';
-        document.getElementById('reviewText').value = '';
-        document.getElementById('reviewForm').style.display = 'none';
+        if (nameInput) nameInput.value = '';
+        if (textInput) textInput.value = '';
+        let form = document.getElementById('reviewForm');
+        if (form) form.style.display = 'none';
     } catch (err) {
         alert(err.message || 'تعذر إرسال الرأي، حاول مرة أخرى');
     } finally {
-        btn.disabled = false;
+        if (btn) btn.disabled = false;
     }
 }
 
@@ -250,35 +279,6 @@ function escapeHtml(str) {
     return div.innerHTML;
 }
 
-const termsModal = document.getElementById('termsModal');
-const footerTermsBtn = document.getElementById('footerTermsBtn');
-const closeModalBtn = document.getElementById('closeModalBtn');
-
-if (footerTermsBtn && termsModal && closeModalBtn) {
-    footerTermsBtn.onclick = function() {
-        termsModal.style.display = 'flex';
-    }
-    closeModalBtn.onclick = function() {
-        termsModal.style.display = 'none';
-    }
-    window.onclick = function(event) {
-        if (event.target == termsModal) {
-            termsModal.style.display = 'none';
-        }
-    }
-}
-
-const backToTopBtn = document.getElementById('backToTopBtn');
-if (backToTopBtn) {
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 300) {
-            backToTopBtn.classList.add('show');
-        } else {
-            backToTopBtn.classList.remove('show');
-        }
-    });
-}
-
 function scrollToTop() {
     window.scrollTo({
         top: 0,
@@ -286,13 +286,51 @@ function scrollToTop() {
     });
 }
 
-// ربط الأزرار والأحداث برمجياً لتجاوز حظر CSP للـ Event Handlers
+// تهيئة العناصر والأحداث عند تحميل الصفحة
 document.addEventListener('DOMContentLoaded', () => {
+    // إدارة نافذة الشروط والأحكام
+    const termsModal = document.getElementById('termsModal');
+    const footerTermsBtn = document.getElementById('footerTermsBtn');
+    const closeModalBtn = document.getElementById('closeModalBtn');
+
+    if (footerTermsBtn && termsModal) {
+        footerTermsBtn.addEventListener('click', () => {
+            termsModal.style.display = 'flex';
+        });
+    }
+    if (closeModalBtn && termsModal) {
+        closeModalBtn.addEventListener('click', () => {
+            termsModal.style.display = 'none';
+        });
+    }
+    window.addEventListener('click', (event) => {
+        if (termsModal && event.target === termsModal) {
+            termsModal.style.display = 'none';
+        }
+    });
+
+    // إدارة زر العودة للأعلى والتحكم بظهوره
+    const backToTopBtn = document.getElementById('backToTopBtn');
+    if (backToTopBtn) {
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backToTopBtn.classList.add('show');
+                backToTopBtn.style.display = 'flex';
+            } else {
+                backToTopBtn.classList.remove('show');
+                backToTopBtn.style.display = 'none';
+            }
+        });
+        backToTopBtn.addEventListener('click', scrollToTop);
+    }
+
+    // ربط خانة البحث
     const searchInput = document.getElementById('searchInput');
     if (searchInput) {
         searchInput.addEventListener('keyup', filterProducts);
     }
 
+    // ربط أزرار عرض المزيد
     const loadMoreCatBtn = document.getElementById('loadMoreCategories');
     if (loadMoreCatBtn) {
         loadMoreCatBtn.addEventListener('click', loadMoreCategories);
@@ -308,6 +346,7 @@ document.addEventListener('DOMContentLoaded', () => {
         loadMoreRevBtn.addEventListener('click', loadMoreReviews);
     }
 
+    // ربط أزرار إضافة وتقييم الآراء
     const addReviewBtn = document.querySelector('.add-review-btn');
     if (addReviewBtn) {
         addReviewBtn.addEventListener('click', toggleReviewForm);
@@ -318,18 +357,17 @@ document.addEventListener('DOMContentLoaded', () => {
         submitRevBtn.addEventListener('click', submitReview);
     }
 
-    // ربط أزرار التصنيفات (الكل والتصنيفات الأخرى)
-    const categoryButtons = document.querySelectorAll('.category-btn');
-    categoryButtons.forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            filterCategory(btn.textContent.trim(), btn);
+    // زر "الكل" الافتراضي للتصنيفات
+    const allCategoryBtn = document.querySelector('.category-btn');
+    if (allCategoryBtn) {
+        allCategoryBtn.addEventListener('click', (e) => {
+            filterCategory('الكل', allCategoryBtn);
         });
-    });
+    }
 });
 
+// تحميل البيانات الأولية للمتجر
 loadStoreSettings();
 loadCategories();
 loadProducts();
 loadReviews();
-
-
