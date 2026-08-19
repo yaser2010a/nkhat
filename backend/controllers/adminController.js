@@ -203,13 +203,17 @@ async function getAllReviews(req, res) {
 
 async function approveReview(req, res) {
   const id = parseInt(req.params.id, 10);
-  const result = await execute(
-    "UPDATE reviews SET status = 'approved' WHERE id = $1 AND status = 'pending'",
+  
+  const [existing] = await query('SELECT * FROM reviews WHERE id = $1', [id]);
+  if (!existing) {
+    return res.status(404).json({ success: false, message: 'الرأي غير موجود' });
+  }
+
+  await execute(
+    "UPDATE reviews SET status = 'approved' WHERE id = $1",
     [id]
   );
-  if (result.rowCount === 0) {
-    return res.status(404).json({ success: false, message: 'الرأي غير موجود أو مقبول مسبقاً' });
-  }
+  
   const [review] = await query('SELECT * FROM reviews WHERE id = $1', [id]);
   res.json({ success: true, message: 'تم قبول الرأي', data: formatReview(review) });
 }
@@ -259,10 +263,13 @@ async function updateReview(req, res) {
 
 async function deleteReview(req, res) {
   const id = parseInt(req.params.id, 10);
-  const result = await execute('DELETE FROM reviews WHERE id = $1', [id]);
-  if (result.rowCount === 0) {
+  
+  const [existing] = await query('SELECT id FROM reviews WHERE id = $1', [id]);
+  if (!existing) {
     return res.status(404).json({ success: false, message: 'الرأي غير موجود' });
   }
+
+  await execute('DELETE FROM reviews WHERE id = $1', [id]);
   res.json({ success: true, message: 'تم حذف الرأي' });
 }
 
