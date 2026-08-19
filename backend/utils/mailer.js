@@ -1,7 +1,7 @@
 'use strict';
 
 const { Resend } = require('resend');
-const env = require('./env');
+const env = require('../config/env');
 
 // استخدام مفتاح الـ API الموجود في المتغيرات
 const resend = new Resend(process.env.SMTP_PASS || process.env.RESEND_API_KEY);
