@@ -4,7 +4,7 @@ const { Resend } = require('resend');
 const env = require('./env');
 
 // استخدام مفتاح الـ API الموجود في المتغيرات
-const resend = new Resend(env.smtp.pass); 
+const resend = new Resend(process.env.SMTP_PASS || process.env.RESEND_API_KEY);
 // ملاحظة: env.smtp.pass هو نفسه مفتاح الـ re_... اللي حطيته في الـ Render
 
 async function send2FACode(to, code) {
