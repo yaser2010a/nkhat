@@ -114,82 +114,10 @@
     </div>
 </div>
 
+<!-- روابط السكربتات الخارجية -->
 <script src="../../assets/config.js"></script>
 <script src="../../assets/api-client.js"></script>
-<script>
-let pendingToken = null;
-
-function showError(message) {
-    const box = document.getElementById('loginError');
-    box.textContent = message;
-    box.classList.add('show');
-}
-
-function hideError() {
-    document.getElementById('loginError').classList.remove('show');
-}
-
-document.getElementById('loginForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    hideError();
-
-    const email = document.getElementById('loginEmail').value.trim();
-    const password = document.getElementById('loginPassword').value;
-    const btn = document.getElementById('loginBtn');
-
-    btn.disabled = true;
-    try {
-        const res = await api.post('/admin/login', { email, password });
-        pendingToken = res.pendingToken;
-
-        document.getElementById('loginForm').style.display = 'none';
-        document.getElementById('twoFAForm').style.display = 'block';
-        document.getElementById('stepSubtitle').textContent = 'أدخل رمز التحقق المرسل لبريدك';
-        document.getElementById('twoFACode').focus();
-    } catch (err) {
-        showError(err.message);
-    } finally {
-        btn.disabled = false;
-    }
-});
-
-document.getElementById('twoFAForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    hideError();
-
-    const code = document.getElementById('twoFACode').value.trim();
-    const btn = document.getElementById('verifyBtn');
-
-    btn.disabled = true;
-    try {
-        await api.post('/admin/verify-2fa', { pendingToken, code });
-        window.location.href = 'admin-base-sr67.html';
-    } catch (err) {
-        showError(err.message);
-    } finally {
-        btn.disabled = false;
-    }
-});
-
-document.getElementById('backToLogin').addEventListener('click', () => {
-    pendingToken = null;
-    hideError();
-    document.getElementById('twoFAForm').style.display = 'none';
-    document.getElementById('loginForm').style.display = 'block';
-    document.getElementById('stepSubtitle').textContent = 'تسجيل الدخول إلى لوحة التحكم';
-    document.getElementById('twoFACode').value = '';
-});
-
-// إذا الجلسة شغالة أصلاً، انتقل مباشرة للوحة التحكم
-(async () => {
-    try {
-        await api.get('/admin/me');
-        window.location.href = 'admin-base-sr67.html';
-    } catch {
-        // ما فيه جلسة — يبقى في صفحة الدخول
-    }
-})();
-</script>
+<script src="login-logic.js"></script>
 
 </body>
 </html>
