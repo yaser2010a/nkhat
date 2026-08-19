@@ -161,6 +161,9 @@ body {
     width: 100%;
     max-width: 900px;
     margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
 .store-card {
@@ -321,6 +324,7 @@ body {
 }
 
 .review-form {
+    display: none;
     flex-direction: column;
     gap: 8px;
     margin-bottom: 14px;
@@ -436,6 +440,13 @@ body {
     margin: 0 0 12px;
 }
 
+.about-section .banner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 12px;
+}
+
 .features-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -524,6 +535,11 @@ body {
     font-weight: 700;
     text-decoration: none;
     transition: 0.5s;
+}
+
+#footerTermsBtn {
+    color: inherit;
+    text-decoration: none;
 }
 
 .footer-link:hover {
@@ -617,7 +633,7 @@ body {
 /* 7. زر عرض المزيد والأدوات المساعدة          */
 /* ========================================== */
 .load-more-btn {
-    display: block;
+    display: none;
     margin: 12px auto 0;
     background: #fff;
     border: 0.5px solid #E4D6B8;
@@ -714,7 +730,89 @@ body {
 }
 
 /* ========================================== */
-/* 9. زر العودة للأعلى (Back to Top)          */
+/* 9. تنسيقات مودال الشروط والأحكام (Terms Modal) */
+/* ========================================== */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: #fff;
+    padding: 25px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 85vh;
+    overflow-y: auto;
+    text-align: right;
+    direction: rtl;
+    position: relative;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+#closeModalBtn {
+    position: absolute;
+    top: 12px;
+    left: 15px;
+    font-size: 26px;
+    cursor: pointer;
+    color: #333;
+    font-weight: bold;
+}
+
+.modal-content h2 {
+    margin-top: 0;
+    color: #333;
+    font-size: 20px;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 10px;
+}
+
+.modal-cr-box {
+    background-color: #f9f9f9;
+    border: 1px solid #e1e1e1;
+    padding: 12px 15px;
+    border-radius: 8px;
+    margin-top: 15px;
+    font-size: 13px;
+    color: #555;
+}
+
+.modal-cr-box p {
+    margin: 0 0 5px 0;
+}
+
+.modal-cr-box p:last-child {
+    margin-bottom: 0;
+}
+
+.modal-body {
+    color: #444;
+    line-height: 1.8;
+    font-size: 14px;
+    margin-top: 15px;
+    max-height: 50vh;
+    overflow-y: auto;
+    padding-left: 10px;
+}
+
+.modal-body h3 {
+    font-size: 16px;
+    color: #222;
+    margin-top: 15px;
+}
+
+/* ========================================== */
+/* 10. زر العودة للأعلى (Back to Top)         */
 /* ========================================== */
 #backToTopBtn {
     position: fixed;
@@ -766,8 +864,9 @@ body {
 .product-item {
     animation: productFadeIn 0.35s ease-out forwards;
 }
+
 /* ========================================== */
-/* 10. التصميم المتجاوب للشاشات الصغيرة       */
+/* 11. التصميم المتجاوب للشاشات الصغيرة       */
 /* ========================================== */
 @media (max-width: 600px) {
     body {
