@@ -1,0 +1,5 @@
+node_modules/
+uploads/products/*
+!uploads/products/.gitkeep
+.env
+*.log

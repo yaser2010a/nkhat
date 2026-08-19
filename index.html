@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تموينات النكهة الشامية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header class="header">
+        <nav class="nav">
+            <ul class="btns-div">
+                <li><a href="#about" class="btns">من نحن</a></li>
+                <li><a href="#products" class="btns">المنتجات</a></li>
+                <li><a href="#reviews" class="btns">الآراء</a></li>
+                <li><a href="#contact" class="btns">تواصل معنا</a></li>
+            </ul>
+        </nav>
+        <div class="logo-circle">
+            <img src="assets/logo.png" alt="شعار النكهة الشامية">
+        </div>
+        <h1 class="text" id="storeName">تموينات النكهة الشامية</h1>
+        <h1 class="under-text" id="storeTagline">للتسوق</h1>
+        <div class="call-btns" id="contact">
+            <a href="tel:0541504955" class="call-btn" id="callBtn">اتصل</a>
+            <a target="_blank" href="#" class="call-btn" id="whatsappBtn">واتساب</a>
+        </div>
+    </header>
+
+    <main class="products-section">
+        <div class="products-div">
+            <div class="search-container">
+                <div class="store-wrapper" style="display: flex; flex-direction: column; gap: 20px;">
+
+                    <h2 class="sr-only">تصور مبدئي لأقسام موقع متجر الشامية</h2>
+
+                    <!-- 1. قسم المنتجات والأقسام -->
+                    <section id="products" class="store-card">
+                        <div class="search-box">
+                            <i class="ti ti-search" aria-hidden="true"></i>
+                            <input type="text" id="searchInput" placeholder="ابحث عن منتج..." onkeyup="filterProducts()">
+                        </div>
+
+                        <div class="categories-list" id="categoriesList">
+                            <button class="category-btn active" onclick="filterCategory('الكل', this)">الكل</button>
+                        </div>
+                        <button class="load-more-btn" id="loadMoreCategories" onclick="loadMoreCategories()" style="display:none;">تصنيفات أخرى</button>
+
+                        <div class="products-grid" id="productsGrid">
+                            <!-- سيتم وضع المنتجات أو رسالة عدم توفرها برمجياً -->
+                        </div>
+                        <button class="load-more-btn" id="loadMoreProducts" onclick="loadMoreProducts()" style="display:none;">عرض المزيد</button>
+                    </section>
+
+                    <!-- 2. قسم من نحن -->
+                    <section id="about" class="about-section">
+                        <div>
+                            <p class="about-title" id="aboutTitle">بقالة الشامية</p>
+                            <p class="about-desc" id="aboutDesc">منتجات سورية أصيلة في قلب جازان.</p>
+                            <div class="features-grid">
+                                <div class="feature-item"><i class="ti ti-award" aria-hidden="true"></i>جودة عالية</div>
+                                <div class="feature-item"><i class="ti ti-category" aria-hidden="true"></i>تشكيلة متنوعة</div>
+                                <div class="feature-item"><i class="ti ti-certificate" aria-hidden="true"></i>أصالة المنتجات</div>
+                                <div class="feature-item"><i class="ti ti-truck" aria-hidden="true"></i>خدمة سريعة</div>
+                            </div>
+                        </div>
+                        <div class="banner">
+                            <img id="bannerImage" src="assets/banner.jpg" alt="بانر بقالة الشامية" style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px;">
+                        </div>
+                    </section>
+
+                    <!-- 3. قسم آراء العملاء -->
+                    <section id="reviews" class="reviews-section">
+                        <div class="reviews-header">
+                            <button class="add-review-btn" onclick="toggleReviewForm()">
+                                <i class="ti ti-plus" aria-hidden="true"></i>
+                                أضف رأيك
+                            </button>
+                        </div>
+
+                        <div class="review-form" id="reviewForm" style="display: none;">
+                            <input type="text" id="reviewerName" placeholder="اسمك" maxlength="30">
+                            <textarea id="reviewText" placeholder="اكتب رأيك هنا..." maxlength="150" rows="3"></textarea>
+                            <button class="submit-review-btn" onclick="submitReview()" id="submitReviewBtn">إرسال الرأي</button>
+                        </div>
+
+                        <div class="reviews-scroll" id="reviewsScroll">
+                            <!-- سيتم وضع الآراء أو رسالة عدم توفرها برمجياً -->
+                        </div>
+                        <button class="load-more-btn" id="loadMoreReviews" onclick="loadMoreReviews()" style="display:none;">عرض المزيد</button>
+                    </section>
+
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <section class="footer-section">
+        <div class="all-footers">
+
+            <div class="cart-icon-circle">
+                <i class="ti ti-shopping-cart"></i>
+            </div>
+
+            <h1 class="footer-title" id="footerStoreName">تموينات النكهة الشامية</h1>
+            <h3 class="under-title" id="footerAddress">منتجات سورية اصيلة في قلب جازان</h3>
+
+            <div class="footer-links">
+                <hr class="divider">
+                <a href="#products" class="footer-link">المنتجات</a>
+                <a href="#about" class="footer-link">من نحن</a>
+                <a href="#reviews" class="footer-link">الآراء</a>
+                <a href="#contact" class="footer-link">تواصل معنا</a>
+                <a href="javascript:void(0);" id="footerTermsBtn" class="footer-link" style="color: inherit; text-decoration: none;">الشروط والأحكام</a>
+                <hr class="divider">
+            </div>
+
+            <div class="footer-info">
+                <div class="social-links">
+                    <a href="#" target="_blank" class="social-icon" id="socialWhatsapp">
+                        <i class="ti ti-brand-whatsapp"></i>
+                    </a>
+                   <a href="https://www.facebook.com/Naaaaaaaakaht" target="_blank" class="social-icon" id="socialfacebook">
+                        <i class="ti ti-brand-facebook"></i>
+                    </a>
+                    <a href="#" target="_blank" class="social-icon" id="socialInstagram">
+                        <i class="ti ti-brand-instagram"></i>
+                    </a>
+                    <a href="#" target="_blank" class="social-icon" id="socialSnapchat">
+                        <i class="ti ti-brand-snapchat"></i>
+                    </a>
+                </div>
+
+                <p class="footer-location">
+                    <i class="ti ti-map-pin"></i>
+                    <span id="footerLocationText">جازان</span>
+                </p>
+
+                <div class="footer-actions">
+                    <a href="#" target="_blank" class="footer-action-btn" id="footerMapsBtn">
+                        <i class="ti ti-map"></i>
+                        الموقع على خرائط قوقل
+                    </a>
+                    <a href="#" class="footer-action-btn" id="footerCallBtn">
+                        <i class="ti ti-phone"></i>
+                        اتصل بنا
+                    </a>
+                </div>
+
+                <p class="footer-cr" id="footerCr1">السجل التجاري: -</p>
+                <p class="footer-cr" id="footerCr2">رخصة المتجر: -</p>
+                <p class="footer-copyright" id="footerStoreNameCopyright">© 2026 تموينات النكهة الشامية. جميع الحقوق محفوظة</p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- المودال الخاص بالشروط والأحكام -->
+    <div id="termsModal" class="modal-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); z-index: 9999; justify-content: center; align-items: center;">
+      <div class="modal-content" style="background-color: #fff; padding: 25px; border-radius: 12px; width: 90%; max-width: 600px; max-height: 85vh; overflow-y: auto; text-align: right; direction: rtl; position: relative; box-shadow: 0 5px 15px rgba(0,0,0,0.3);">
+        <span id="closeModalBtn" style="position: absolute; top: 12px; left: 15px; font-size: 26px; cursor: pointer; color: #333; font-weight: bold;">&times;</span>
+        <h2 style="margin-top: 0; color: #333; font-size: 20px; border-bottom: 2px solid #eee; padding-bottom: 10px;">الشروط والأحكام والبيانات النظامية</h2>
+        
+        <div style="background-color: #f9f9f9; border: 1px solid #e1e1e1; padding: 12px 15px; border-radius: 8px; margin-top: 15px; font-size: 13px; color: #555;">
+          <p style="margin: 0 0 5px 0;"><strong>السجل التجاري:</strong> <span id="modalCrNumber">0000000000</span></p>
+          <p style="margin: 0;"><strong>رخصة المتجر:</strong> <span id="modalLicenseNumber">0000000000</span></p>
+        </div>
+
+        <div class="modal-body" style="color: #444; line-height: 1.8; font-size: 14px; margin-top: 15px;">
+          <p><strong>مرحباً بكم في الموقع التعريفي لمتجرنا.</strong> يخضع دخولك واستخدامك لهذا الموقع للشروط والأحكام التالية ولأنظمة المملكة العربية السعودية.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- نافذة تكبير صورة المنتج ومعلوماته -->
+    <div id="productModal" class="product-modal-overlay">
+        <div class="product-modal-content">
+            <span id="closeProductModal" class="product-modal-close">&times;</span>
+            <img id="modalProductImg" src="" alt="" class="product-modal-img">
+            <h3 id="modalProductName" class="product-modal-title"></h3>
+            <p id="modalProductPrice" class="product-modal-price"></p>
+        </div>
+    </div>
+
+    <!-- زر العودة للأعلى -->
+    <button id="backToTopBtn" onclick="scrollToTop()">
+        <i class="ti ti-arrow-up"></i>
+    </button>
+
+    <!-- روابط الجافاسكريبت الخارجية -->
+    <script src="assets/config.js"></script>
+    <script src="assets/api-client.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

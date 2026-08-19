@@ -1,0 +1,53 @@
+databases:
+  - name: nkhat-db
+    databaseName: nkhat
+    plan: free
+
+services:
+  - type: web
+    name: nkhat-frontend
+    runtime: static
+    plan: free
+    buildCommand: echo "no build needed"
+    staticPublishPath: .
+    routes:
+      - type: rewrite
+        source: /admin
+        destination: /pages/admin/login.html
+
+  - type: web
+    name: nkhat-api
+    runtime: node
+    plan: free
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: DATABASE_URL
+        fromDatabase:
+          name: nkhat-db
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+      - key: ADMIN_EMAIL
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: SMTP_HOST
+        value: smtp.gmail.com
+      - key: SMTP_PORT
+        value: 587
+      - key: SMTP_SECURE
+        value: false
+      - key: SMTP_USER
+        sync: false
+      - key: SMTP_PASS
+        sync: false
+      - key: SMTP_FROM
+        sync: false
+      - key: CORS_ORIGINS
+        sync: false

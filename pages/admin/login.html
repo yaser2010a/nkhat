@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تسجيل الدخول - لوحة تحكم النكهة الشامية</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<link rel="stylesheet" href="style.css">
+<style>
+    .login-wrapper {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
+    .login-box {
+        background: var(--surface-color);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        box-shadow: var(--shadow);
+        padding: 36px;
+        width: 380px;
+        max-width: 100%;
+    }
+    .login-logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: bold;
+        font-size: 1.2rem;
+        margin-bottom: 8px;
+        justify-content: center;
+    }
+    .login-logo i {
+        background: var(--surface-light);
+        padding: 8px;
+        border-radius: 8px;
+        color: var(--primary-color);
+    }
+    .login-subtitle {
+        text-align: center;
+        color: var(--text-muted);
+        margin-bottom: 24px;
+        font-size: 0.9rem;
+    }
+    .login-error {
+        background: rgba(239, 83, 80, 0.15);
+        border: 1px solid #ef5350;
+        color: #ef9a9a;
+        padding: 10px 14px;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        margin-bottom: 16px;
+        display: none;
+    }
+    .login-error.show { display: block; }
+    .btn-primary.full { width: 100%; justify-content: center; margin-top: 10px; }
+    .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+    .code-input {
+        text-align: center;
+        letter-spacing: 10px;
+        font-size: 1.4rem;
+        font-weight: bold;
+    }
+    .back-link {
+        display: block;
+        text-align: center;
+        margin-top: 16px;
+        color: var(--text-muted);
+        font-size: 0.85rem;
+        cursor: pointer;
+        text-decoration: underline;
+    }
+</style>
+</head>
+<body>
+
+<div class="login-wrapper">
+    <div class="login-box">
+        <div class="login-logo">
+            <i class="ti ti-shopping-cart"></i>
+            <span>النكهة الشامية</span>
+        </div>
+        <p class="login-subtitle" id="stepSubtitle">تسجيل الدخول إلى لوحة التحكم</p>
+
+        <div class="login-error" id="loginError"></div>
+
+        <form id="loginForm">
+            <label>البريد الإلكتروني</label>
+            <input type="email" id="loginEmail" placeholder="admin@example.com" autocomplete="username" required>
+
+            <label>كلمة المرور</label>
+            <input type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password" required>
+
+            <button type="submit" class="btn-primary full" id="loginBtn">
+                <i class="ti ti-login"></i>
+                تسجيل الدخول
+            </button>
+        </form>
+
+        <form id="twoFAForm" style="display:none;">
+            <label>رمز التحقق (وصلك على بريدك الإلكتروني)</label>
+            <input type="text" id="twoFACode" class="code-input" maxlength="6" inputmode="numeric" placeholder="000000" required>
+
+            <button type="submit" class="btn-primary full" id="verifyBtn">
+                <i class="ti ti-shield-check"></i>
+                تأكيد الرمز
+            </button>
+
+            <span class="back-link" id="backToLogin">رجوع لتسجيل الدخول</span>
+        </form>
+    </div>
+</div>
+
+<script src="../../assets/config.js"></script>
+<script src="../../assets/api-client.js"></script>
+<script>
+let pendingToken = null;
+
+function showError(message) {
+    const box = document.getElementById('loginError');
+    box.textContent = message;
+    box.classList.add('show');
+}
+
+function hideError() {
+    document.getElementById('loginError').classList.remove('show');
+}
+
+document.getElementById('loginForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    hideError();
+
+    const email = document.getElementById('loginEmail').value.trim();
+    const password = document.getElementById('loginPassword').value;
+    const btn = document.getElementById('loginBtn');
+
+    btn.disabled = true;
+    try {
+        const res = await api.post('/admin/login', { email, password });
+        pendingToken = res.pendingToken;
+
+        document.getElementById('loginForm').style.display = 'none';
+        document.getElementById('twoFAForm').style.display = 'block';
+        document.getElementById('stepSubtitle').textContent = 'أدخل رمز التحقق المرسل لبريدك';
+        document.getElementById('twoFACode').focus();
+    } catch (err) {
+        showError(err.message);
+    } finally {
+        btn.disabled = false;
+    }
+});
+
+document.getElementById('twoFAForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    hideError();
+
+    const code = document.getElementById('twoFACode').value.trim();
+    const btn = document.getElementById('verifyBtn');
+
+    btn.disabled = true;
+    try {
+        await api.post('/admin/verify-2fa', { pendingToken, code });
+        window.location.href = 'admin-base-sr67.html';
+    } catch (err) {
+        showError(err.message);
+    } finally {
+        btn.disabled = false;
+    }
+});
+
+document.getElementById('backToLogin').addEventListener('click', () => {
+    pendingToken = null;
+    hideError();
+    document.getElementById('twoFAForm').style.display = 'none';
+    document.getElementById('loginForm').style.display = 'block';
+    document.getElementById('stepSubtitle').textContent = 'تسجيل الدخول إلى لوحة التحكم';
+    document.getElementById('twoFACode').value = '';
+});
+
+// إذا الجلسة شغالة أصلاً، انتقل مباشرة للوحة التحكم
+(async () => {
+    try {
+        await api.get('/admin/me');
+        window.location.href = 'admin-base-sr67.html';
+    } catch {
+        // ما فيه جلسة — يبقى في صفحة الدخول
+    }
+})();
+</script>
+
+</body>
+</html>
